@@ -3,7 +3,7 @@ obtenerCVEs <- function(doc) {
 }
 
 obtenerCPEs <- function(doc) {
-  return(xpathApply(doc,"//vuln:vulnerable-software-list"))
+  return(xpathApply(doc,"//vuln:vulnerable-software-list",xmlValue))
 }
 
 obtenerCVSS <- function(doc) {
