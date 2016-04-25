@@ -7,22 +7,28 @@ obtenerCPEs <- function(doc) {
   return(xpathApply(doc,"//vuln:vulnerable-software-list"))
 }
 
+obtencve<- function(doc, cve) {
+  path <- paste("//entry[@id='", cve, "']/",sep="")
+  cpes <- xpathApply(doc,path)
+  return(cpes)
+}
+
 #Obtener CPE a partir de un CVE
 obtenerCPEbyCVE <- function(doc, cve) {
   #cpes <- xpathApply(doc,"//entry[@id='", cve, "']")
 
-  listNodes <- xmlToList(doc)
-  longLista <- length(listNodes)-1
+  longLista <- length(doc)-1
   i <- 1
   encontrado <- FALSE
 
   while (i<=longLista && !encontrado) {
-    if (cve == listNodes[[i]]$`cve-id`) {
+    if (cve == doc[[i]]$`cve-id`) {
       encontrado <- TRUE
-      cpes <- listNodes[[i]]$`vulnerable-software-list`
+      cpes <- doc[[i]]$`vulnerable-software-list`
     }
     i<-i+1
   }
+
   return(cpes)
 }
 
@@ -40,18 +46,19 @@ obtenerCVSS <- function(doc) {
 obtenerCVSSbyCVE <- function(doc, cve) {
   #cpes <- xpathApply(doc,"//entry[@id='", cve, "']")
 
-  listNodes <- xmlToList(doc)
-  longLista <- length(listNodes)-1
+
+  longLista <- length(doc)-1
   i <- 1
   encontrado <- FALSE
 
   while (i<=longLista && !encontrado) {
-    if (cve == listNodes[[i]]$`cve-id`) {
+    if (cve == doc[[i]]$`cve-id`) {
       encontrado <- TRUE
-      cvss <- listNodes[[i]]$cvss$base_metrics$score
+      cvss <- doc[[i]]$cvss$base_metrics$score
     }
     i<-i+1
   }
+
   return(cvss)
 }
 

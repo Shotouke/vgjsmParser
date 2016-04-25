@@ -1,23 +1,39 @@
-crear_dataframe <- function(doc ) {
+crear_dataframe <- function(doc, cpe ="Microsoft" ) {
   max <- length(obtenerTodosCPEs(doc))
 
   df <- data.frame(cve = character(max),
              cpe = character(max),
              cvss = numeric(max))
 
+  df <-lapply(df, as.character)
+
   cves <- obtenerCVEs(xmlFile)
 
   longcves <- length(cves)
 
-  for (i in 1:longcves) {
-    print("OBTENIEND CPES")
-    cpes <- obtenerCPEbyCVE(xmlFile,cves[[i]])
-    print("OBTENIENDO CVSS")
-    cvss <- obtenerCVSSbyCVE(xmlFile,cves[[i]])
+  #listNodes <- xmlToList(doc)
 
-    for (j in 1:length(cpes)) {
-      texto <- sprintf("%s %s %s",cves[[i]],cpes[[j]],cvss[[1]])
-      print(texto)
+  contadordf <- 1
+  for (i in 1:longcves) {
+    print("OBTENIENDO CPES")
+    cpes <- obtenerCPEbyCVE(listNodes,cves[[i]])
+    print(length(cpes))
+    print("OBTENIENDO CVSS")
+    cvss <- obtenerCVSSbyCVE(listNodes,cves[[i]])
+
+    longcpes <-length(cpes)
+    if (longcpes >0) {
+      c<-grep(cpe,cpes,ignore.case = T, value = T)
+
+      #lenght(c)
+
+      for (j in 1:longcpes) {
+      df$cve[contadordf] <- cves[[i]]
+      df$cpe[contadordf] <-cpes[[j]]
+      df$cvss[contadordf] <-cvss[[1]]
+
+      contadordf <- contadordf + 1
+      }
     }
   }
 
