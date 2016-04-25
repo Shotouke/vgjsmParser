@@ -11,7 +11,7 @@ crear_dataframe <- function(doc, cpe ="Microsoft" ) {
 
   longcves <- length(cves)
 
-  #listNodes <- xmlToList(doc)
+  listNodes <- xmlToList(doc)
 
   contadordf <- 1
   for (i in 1:longcves) {
