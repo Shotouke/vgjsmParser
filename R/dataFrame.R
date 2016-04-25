@@ -1,11 +1,7 @@
 crear_dataframe <- function(doc, cpe ="Microsoft" ) {
   max <- length(obtenerTodosCPEs(doc))
 
-  df <- data.frame(cve = character(max),
-             cpe = character(max),
-             cvss = numeric(max))
-
-  df <-lapply(df, as.character)
+  df <- lapply(data.frame(cve = character(max), cpe = character(max), cvss = numeric(max)), as.character)
 
   cves <- obtenerCVEs(xmlFile)
 
@@ -28,11 +24,11 @@ crear_dataframe <- function(doc, cpe ="Microsoft" ) {
       #lenght(c)
 
       for (j in 1:longcpes) {
-      df$cve[contadordf] <- cves[[i]]
-      df$cpe[contadordf] <-cpes[[j]]
-      df$cvss[contadordf] <-cvss[[1]]
+        df$cve[contadordf] <- cves[[i]]
+        df$cpe[contadordf] <-cpes[[j]]
+        df$cvss[contadordf] <-cvss[[1]]
 
-      contadordf <- contadordf + 1
+        contadordf <- contadordf + 1
       }
     }
   }
