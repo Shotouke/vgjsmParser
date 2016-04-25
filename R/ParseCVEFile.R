@@ -2,6 +2,7 @@
 obtenerCVEs <- function(doc) {
   return(xpathApply(doc,"//vuln:cve-id",xmlValue))
 }
+
 #Obtiene todos los CPE's de los CVEs, pero todos concatenados
 obtenerCPEs <- function(doc) {
   return(xpathApply(doc,"//vuln:vulnerable-software-list"))
@@ -46,7 +47,6 @@ obtenerCVSS <- function(doc) {
 obtenerCVSSbyCVE <- function(doc, cve) {
   #cpes <- xpathApply(doc,"//entry[@id='", cve, "']")
 
-
   longLista <- length(doc)-1
   i <- 1
   encontrado <- FALSE
@@ -61,7 +61,6 @@ obtenerCVSSbyCVE <- function(doc, cve) {
 
   return(cvss)
 }
-
 
 #Obtiene todos los AccesVector
 obtenerAccesVector <- function(doc) {
