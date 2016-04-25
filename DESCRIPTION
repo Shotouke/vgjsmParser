@@ -2,8 +2,12 @@ Package: vgjsmParser
 Type: Package
 Title: This is a collaborative project about how we can use data mining to process complex information about informatic security
 Version: 0.1.0
-Author: Victor Santiago, Guillem Arana, Sara Ruiz, Jorge Sanz, Manuel Rojo
-Maintainer: v.manel.g@gmail.com, aranabcn11@gmail.com, jorges12388@gmail.com, sruizcasiano@gmail.com, manuelrojohorno@gmail.com
+Author:
+  person("Jorge", "Sanz", email = "jorges12388@gmail.com", role = c("aut", "cre")),
+  person("Manuel", "Rojo", email = "manuelrojohorno@gmail.com", role = c("aut", "cre")),
+  person("Sara", "Ruiz", email = "sruizcasiano@gmail.com", role = c("aut", "cre")),
+  person("Victor", "Santiago", email = "v.manel.g@gmail.com", role = c("aut", "cre")),
+  person("Guillem", "Arana", email = "aranabcn11@gmail.com", role = c("aut", "cre"))
 Description: More about what it does (maybe more than one line)
 License: GNU GENERAL PUBLIC LICENSE
 LazyData: TRUE
