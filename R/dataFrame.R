@@ -1,33 +1,58 @@
-crear_dataframe <- function(doc, cpe ="Microsoft" ) {
-  max <- length(obtenerTodosCPEs(doc))
+crear_dataframe <- function(...) {
+  max <- 0
+  for (x in list(...)) {
+    max <- max + length(obtenerTodosCPEs(x))
+  }
 
-  df <- lapply(data.frame(cve = character(max), cpe = character(max), cvss = numeric(max)), as.character)
+  print(max)
+
+  #df <- lapply(data.frame(cve = character(max), cpe = character(max), cvss = numeric(max)), as.character)
+  df<-data.frame(cve = character(max), cpe = character(max), cvss = numeric(max), ano = character(max))
+
+  df$cve <- as.character(df$cve)
+  df$cpe <- as.character(df$cpe)
+  df$ano <- as.character(df$ano)
+  return(df)
+}
+
+obtenerUlimoElemento <- function(df) {
+  longcve <- length(df$cve)
+  encontrado <- FALSE
+  pos <- 1
+  while (pos <= longcve && !encontrado) {
+    if (df$cve[[pos]]=="")
+      encontrado <- TRUE
+    else
+      pos <- pos + 1
+  }
+  return(pos)
+}
+
+crear_contenido <- function(xmlFile, listNodes, df, cpe ="Microsoft" ) {
 
   cves <- obtenerCVEs(xmlFile)
 
   longcves <- length(cves)
 
-  listNodes <- xmlToList(doc)
-
-  contadordf <- 1
+  contadordf <- obtenerUlimoElemento(df)
   for (i in 1:longcves) {
-    print("OBTENIENDO CPES")
     cpes <- obtenerCPEbyCVE(listNodes,cves[[i]])
-    print(length(cpes))
-    print("OBTENIENDO CVSS")
     cvss <- obtenerCVSSbyCVE(listNodes,cves[[i]])
 
-    longcpes <-length(cpes)
+    c<-grep(paste("cpe:/o:",cpe,sep=""),cpes,ignore.case = T, value = T)
+    #longcpes <-length(cpes)
+    longcpes <-length(c)
+
     if (longcpes >0) {
-      c<-grep(cpe,cpes,ignore.case = T, value = T)
-
-      #lenght(c)
-
       for (j in 1:longcpes) {
-        df$cve[contadordf] <- cves[[i]]
-        df$cpe[contadordf] <-cpes[[j]]
-        df$cvss[contadordf] <-cvss[[1]]
-
+        #df$cve[contadordf] <- cves[[i]]
+        #df$cpe[contadordf] <-cpes[[j]]
+        #df$cvss[contadordf] <-cvss[[1]]
+        df[contadordf,1] <- cves[[i]]
+        #df[contadordf,2] <- cpes[[j]]
+        df[contadordf,2] <- c[[j]]
+        df[contadordf,3] <- cvss[[1]]
+        df[contadordf,4] <- substr(cves[[1]],5,8)
         contadordf <- contadordf + 1
       }
     }
