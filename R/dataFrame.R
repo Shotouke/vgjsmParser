@@ -39,7 +39,7 @@ crear_contenido <- function(xmlFile, listNodes, df, cpe ="Microsoft" ) {
     cpes <- obtenerCPEbyCVE(listNodes,cves[[i]])
     cvss <- obtenerCVSSbyCVE(listNodes,cves[[i]])
 
-    c<-grep(cpe,cpes,ignore.case = T, value = T)
+    c<-grep(paste("cpe:/o:",cpe,sep=""),cpes,ignore.case = T, value = T)
     #longcpes <-length(cpes)
     longcpes <-length(c)
 
