@@ -1,7 +1,5 @@
 context("cves-format")
 
-df <-
-
 cve.regex = "CVE-[[:digit:]]{4}-[[:digit:]]{4}"
 
 test_that("cves-valid_pattern", {

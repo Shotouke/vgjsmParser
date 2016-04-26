@@ -1,16 +1,16 @@
-#Carga del primer fichero
+#Load first XML file
 xmlPath   <- "./inst/extdata/nvdcve-2.0-2016.xml"
 xmlFile <- readXMLFile(xmlPath)
-#carga del segundo fichero
+#Load second XML file
 xmlPath2   <- "./inst/extdata/nvdcve-2.0-2015.xml"
 xmlFile2 <- readXMLFile(xmlPath2)
 df <-crear_dataframe(xmlFile, xmlFile2)
-#Conversión de xml a Lista de los 2 ficheros
+#Convert from XML to list of two files
 listaNodo <- xmlToList(xmlFile)
 listaNodo2<- xmlToList(xmlFile2)
-#Obtencion de vulnerabilidades (CVEs) de microsoft y android del Primer fichero
+#Obtain vulneravilities (CVEs) of  microsoft and android from first XML file
 df <- crear_contenido(xmlFile, listaNodo,df)
 df <- crear_contenido(xmlFile, listaNodo,df,"android")
-#Obtencion de vulnerabilidades (CVEs) de microsoft y android del Segundo fichero
+#Obtain vulneravilities (CVEs) of  microsoft and android from second XML file
 df <- crear_contenido(xmlFile2, listaNodo2,df)
 df <- crear_contenido(xmlFile2, listaNodo2,df,"android")
