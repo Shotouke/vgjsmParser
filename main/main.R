@@ -1,10 +1,9 @@
 xmlPath   <- "./inst/extdata/nvdcve-2.0-2016.xml"
 xmlFile <- readXMLFile(xmlPath)
-#child <- obtencve (xmlFile,"CVE-2016-002")
-#xpath <- "//entry[@id='CVE-2016-0002']/vuln:vulnerable-software-list/vuln:product"
-#doc <- gsub(pattern = "vuln:v", replacement = "vuln_v", x = xmlFile)
-#c<- xpathApply(xmlFile,"//entry[@id='CVE-2016-0002']/vuln:vulnerable-software-list")
-#print(c)
-# cpe <- unlist(obtenerCPEs(xmlFile))
-df <-crear_dataframe(xmlFile)
-
+xmlPath2   <- "./inst/extdata/nvdcve-2.0-2015.xml"
+xmlFile2 <- readXMLFile(xmlPath2)
+df <-crear_dataframe(xmlFile, xmlFile2)
+listaNodo <- xmlToList(xmlFile)
+listaNodo2<- xmlToList(xmlFile2)
+df <- crear_contenido(xmlFile, listaNodo,df)
+df <- crear_contenido(xmlFile, listaNodo,df,"androld")
