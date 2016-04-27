@@ -1,16 +1,27 @@
-#Load first XML file
-xmlPath   <- "./inst/extdata/nvdcve-2.0-2016.xml"
-xmlFile <- readXMLFile(xmlPath)
-#Load second XML file
-xmlPath2   <- "./inst/extdata/nvdcve-2.0-2015.xml"
-xmlFile2 <- readXMLFile(xmlPath2)
-df <-crear_dataframe(xmlFile, xmlFile2)
-#Convert from XML to list of two files
-listaNodo <- xmlToList(xmlFile)
-listaNodo2<- xmlToList(xmlFile2)
-#Obtain vulneravilities (CVEs) of  microsoft and android from first XML file
-df <- crear_contenido(xmlFile, listaNodo,df)
-df <- crear_contenido(xmlFile, listaNodo,df,"android")
-#Obtain vulneravilities (CVEs) of  microsoft and android from second XML file
-df <- crear_contenido(xmlFile2, listaNodo2,df)
-df <- crear_contenido(xmlFile2, listaNodo2,df,"android")
+# Load sources
+source('~/vgjsmParser/R/dataFrame.R')
+source('~/vgjsmParser/R/ParseCVEFile.R')
+source('~/vgjsmParser/R/readXMLFile.R')
+
+# Load first XML file
+xmlPath <- "./inst/extdata/nvdcve-2.0-2016.xml"
+xmlFile <- readXMLFile(file = xmlPath)
+
+# Load second XML file
+xmlPath2 <- "./inst/extdata/nvdcve-2.0-2015.xml"
+xmlFile2 <- readXMLFile(file = xmlPath2)
+
+# Initialize DataFrame
+df <-initialize_dataframe(xmlFile, xmlFile2)
+
+# Convert from XML to list of two files
+nodeList <- xmlToList(node = xmlFile)
+nodeList2<- xmlToList(node = xmlFile2)
+
+# Obtain vulneravilities (CVEs) of  microsoft and android from first XML file
+df <- save_content(xmlFile = xmlFile, nodeList = nodeList, df = df, cpe = "microsoft")
+df <- save_content(xmlFile = xmlFile, nodeList = nodeList, df = df, cpe = "android")
+
+# Obtain vulneravilities (CVEs) of  microsoft and android from second XML file
+df <- save_content(xmlFile = xmlFile2, nodeList = nodeList2, df = df, cpe = "microsoft")
+df <- save_content(xmlFile = xmlFile2, nodeList = nodeList2, df = df,cpe = "android")

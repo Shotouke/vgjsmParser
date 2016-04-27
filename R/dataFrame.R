@@ -1,55 +1,55 @@
-crear_dataframe <- function(...) {
+
+initialize_dataframe <- function(...) {
   max <- 0
   for (x in list(...)) {
-    max <- max + length(obtenerTodosCPEs(x))
+    max <- max + length(obtainAllCPEs(doc = x))
   }
 
-  df<-data.frame(cve = character(max), cpe = character(max), cvss = numeric(max), ano = character(max))
+  df<-data.frame(cve = character(max), cpe = character(max), cvss = numeric(max), year = character(max))
 
   df$cve <- as.character(df$cve)
   df$cpe <- as.character(df$cpe)
-  df$ano <- as.character(df$ano)
+  df$year <- as.character(df$year)
 
   return(df)
 }
 
-obtenerUlimoElemento <- function(df) {
-  longcve <- length(df$cve)
-  encontrado <- FALSE
-  pos <- 1
-  while (pos <= longcve && !encontrado) {
-    if (df$cve[[pos]]=="")
-      encontrado <- TRUE
-    else
-      pos <- pos + 1
-  }
-  return(pos)
-}
+save_content <- function(xmlFile, nodesList, df, cpe) {
 
-crear_contenido <- function(xmlFile, listNodes, df, cpe ="Microsoft" ) {
+  cves <- obtainCVEs(doc = xmlFile)
+  cvesLength <- length(cves)
 
-  cves <- obtenerCVEs(xmlFile)
+  dfCounter <- obtainLastElement(df = df)
+  for (i in 1:cvesLength) {
+    cpes <- obtainCPEbyCVE(doc = nodesList, cve = cves[[i]])
+    cvss <- obtainCVSSbyCVE(doc = nodesList, cve = cves[[i]])
 
-  longcves <- length(cves)
+    c <- grep(paste("cpe:/o:",cpe,sep=""),cpes,ignore.case = T, value = T)
+    cpesLength <- length(c)
 
-  contadordf <- obtenerUlimoElemento(df)
-  for (i in 1:longcves) {
-    cpes <- obtenerCPEbyCVE(listNodes,cves[[i]])
-    cvss <- obtenerCVSSbyCVE(listNodes,cves[[i]])
-
-    c<-grep(paste("cpe:/o:",cpe,sep=""),cpes,ignore.case = T, value = T)
-    longcpes <-length(c)
-
-    if (longcpes >0) {
-      for (j in 1:longcpes) {
-        df[contadordf,1] <- cves[[i]]
-        df[contadordf,2] <- c[[j]]
-        df[contadordf,3] <- cvss[[1]]
-        df[contadordf,4] <- substr(cves[[1]],5,8)
-        contadordf <- contadordf + 1
+    if (cpesLength > 0) {
+      for (j in 1:cpesLength) {
+        df[dfCounter,1] <- cves[[i]]
+        df[dfCounter,2] <- c[[j]]
+        df[dfCounter,3] <- cvss[[1]]
+        df[dfCounter,4] <- substr(cves[[1]],5,8)
+        dfCounter <- dfCounter + 1
       }
     }
   }
 
   return(df)
+}
+
+obtainLastElement <- function(df) {
+  longcve <- length(df$cve)
+  found <- FALSE
+  pos <- 1
+  while (pos <= longcve && !found) {
+    if (df$cve[[pos]]=="")
+      found <- TRUE
+    else
+      pos <- pos + 1
+  }
+  return(pos)
 }
