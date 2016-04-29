@@ -12,16 +12,19 @@ xmlPath2 <- "./inst/extdata/nvdcve-2.0-2015.xml"
 xmlFile2 <- readXMLFile(file = xmlPath2)
 
 # Initialize DataFrame
-df <-initialize_dataframe(xmlFile, xmlFile2)
+df <- initialize_dataframe(xmlFile, xmlFile2)
 
 # Convert from XML to list of two files
 nodeList <- xmlToList(node = xmlFile)
-nodeList2<- xmlToList(node = xmlFile2)
+nodeList2 <- xmlToList(node = xmlFile2)
 
 # Obtain vulneravilities (CVEs) of  microsoft and android from first XML file
-df <- save_content(xmlFile = xmlFile, nodeList = nodeList, df = df, cpe = "microsoft")
-df <- save_content(xmlFile = xmlFile, nodeList = nodeList, df = df, cpe = "android")
+df <- save_content(xmlFile, nodeList, df, "microsoft")
+df <- save_content(xmlFile, nodeList, df, "android")
 
 # Obtain vulneravilities (CVEs) of  microsoft and android from second XML file
-df <- save_content(xmlFile = xmlFile2, nodeList = nodeList2, df = df, cpe = "microsoft")
-df <- save_content(xmlFile = xmlFile2, nodeList = nodeList2, df = df,cpe = "android")
+df <- save_content(xmlFile2, nodeList2, df, "microsoft")
+df <- save_content(xmlFile2, nodeList2, df, "android")
+
+# Delete empty rows
+df <- deleteEmptyRows(df)

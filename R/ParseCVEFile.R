@@ -1,14 +1,39 @@
-#Obtain all CVEs codes
+#' obtainCVEs
+#'
+#' From the object that contains the CVEs xml file
+#' you get a list with all the CVEs in the file
+#'
+#' @param doc - object with loaded file
+#' @return CVEs list file
+#' @examples
+#' list <- obtainCVEs(doc)
 obtainCVEs <- function(doc) {
   return(xpathApply(doc,"//vuln:cve-id",xmlValue))
 }
 
-#Obtain all CPEs separated, this is to allow us create DataFrames
+#' obtainAllCPEs
+#'
+#' From the object that contains the CVEs xml file
+#' you get a list with all the CPEs in the file
+#'
+#' @param doc - object with loaded file
+#' @return CPEs list's file
+#' @examples
+#' list <- obtainAllCPEs(doc)
 obtainAllCPEs <- function(doc) {
   return (xpathApply(doc,"//vuln:product"))
 }
 
-#Obtain CPE from CVE
+#' obtainCPEbyCVE
+#'
+#' From the object that contains the CVEs xml file and a CVE code
+#' you get a list with all the CPEs associated
+#'
+#' @param doc - object with loaded file
+#' @param cve - CVE to obtain CPEs
+#' @return CPEs list
+#' @examples
+#' list <- obtainCPEbyCVE(doc,"CVE-2016-002")
 obtainCPEbyCVE <- function(doc, cve) {
   longLista <- length(doc) - 1
   i <- 1
@@ -25,7 +50,16 @@ obtainCPEbyCVE <- function(doc, cve) {
   return(cpes)
 }
 
-#Obtain CPE fom CVE
+#' obtainCVSSbyCVE
+#'
+#' From the object that contains the CVEs xml file and a CVE code
+#' you get a list with all the CVSSs associated
+#'
+#' @param doc - object with loaded file
+#' @param cve - CVE to obtain CVSSs
+#' @return CVSSs list
+#' @examples
+#' list <- obtainCVSSbyCVE(doc,"CVE-2016-002")
 obtainCVSSbyCVE <- function(doc, cve) {
   longLista <- length(doc) - 1
   i <- 1
