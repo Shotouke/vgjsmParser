@@ -54,7 +54,7 @@ save_content <- function(xmlFile, nodesList, df, cpe) {
         df[dfCounter,2] <- c[[j]]
         df[dfCounter,3] <- cvss[[1]]
         df[dfCounter,4] <- substr(cves[[1]], 5, 8)
-        df[dfCouner, 5] <- cpe
+        df[dfCounter, 5] <- cpe
         dfCounter <- dfCounter + 1
       }
     }

@@ -24,24 +24,16 @@ vgjsmParser <- function() {
   nodeList3 <- xmlToList(node = xmlFile3)
   nodeList4 <- xmlToList(node = xmlFile4)
 
-  # Obtain vulneravilities (CVEs) of  microsoft and android from first XML file
-  df <- save_content(xmlFile, nodeList, df, "microsoft")
-  df <- save_content(xmlFile, nodeList, df, "android")
-
-  # Obtain vulneravilities (CVEs) of  microsoft and android from second XML file
-  df <- save_content(xmlFile2, nodeList2, df, "microsoft")
-  df <- save_content(xmlFile2, nodeList2, df, "android")
-
   # Load OS file
   listSOs<-read.csv("../inst/extdata/SO.csv", header = FALSE)
   listSOs<-levels(listSOs$V1)
 
   #  Obtain vulnerabilities (CVEs) of  microsoft and android from first XML file
   for (i in 1:length(listSOs)) {
-    df <- vgjsmParser:::crear_contenido(xmlFile, listaNodo,df,listSOs[[i]])
-    df <- vgjsmParser:::crear_contenido(xmlFile2, listaNodo2,df,listSOs[[i]])
-    df <- vgjsmParser:::crear_contenido(xmlFile3, listaNodo3,df,listSOs[[i]])
-    df <- vgjsmParser:::crear_contenido(xmlFile4, listaNodo4,df,listSOs[[i]])
+    df <- save_content(xmlFile, nodeList,df,listSOs[[i]])
+    df <- save_content(xmlFile2, nodeList2,df,listSOs[[i]])
+    df <- save_content(xmlFile3, nodeList3,df,listSOs[[i]])
+    df <- save_content(xmlFile4, nodeList4,df,listSOs[[i]])
   }
 
   # Delete empty rows
