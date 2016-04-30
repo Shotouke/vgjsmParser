@@ -9,7 +9,6 @@ output: html_document
 
 Esta pregunta será de utilidad para hacer elecciones de software ya que permitirá añadir a una comparativa un factor indicativo sobre su grado de vulnerabilidad respecto al resto de productos, pudiendo ser muy útil en entornos en que la seguridad es crítica para el negocio.
 
-
 Inicialmente el objeto de estudio era responder a la pregunta de qué sectores profesionales tienen un mayor nivel de inseguridad. Para ello se quería realizar una comparativa del número de CVEs que afectan a cada sector. Para conseguirlo era básico conseguir una fuente pública de datos con listas de software categorizados por su uso en distintos sectores profesionales. En el estudio inicial sobre la disponibilidad de datos se ha conseguido obtener datos sobre la categorización de productos mediante UNSPSC pero se ha detectado que no llega a un nivel suficientemente bajo como para nombrar los distintos softwares de cada categoria. También se ha encontrado listas de software pero sin la categorización deseada, faltando así datos sobre la vinculación de los softwares y los distintos sectores. 
 
 Debído a la dificultad de encontrar fuentes públicas con esta información se ha decidido reformular la pregunta siguiendo con la idea de aportar información sobre el grado de inseguridad pero en tipos de productos, en vez de en sectores
@@ -46,6 +45,15 @@ Las distintas fuentes en que se han encontrado los datos son las siguientes:
 
 *la primeras versiones de nuestro programa se han basada en el xml de un sólo año, más adelante se aplicará el código para recurar toda la información de las vulnerabilidades de todos los años*
 
+### 2.3 Análisis de la información a analizar
+
+Se ha estudiado el esquema de los datos en crudo para poder dar unas pautas detalladas sobre qué tags del fichero habrá que localizar al realizar el código que recogerá los datos relevantes de los ficheros de entradas. 
+
+En primer lugar, del fichero en el que aparece la relación entre vulnerabilidades (CVE) y los programas (CPE) a los que esta afecta, se ha observado que tiene el siguiente formato:
+
+<img src="../inst/extdata/info_cve_xml.png" />
+
+De este fichero se ha definido que se obtendrá el atributo id del tag <entry> para tener el CVE y el contenido del tag <vuln:product> contenido dentro del tag <vuln:vulnerable-software-list> contenido en el tag <entry> para obtener los CPE que afectan al CVE encontrado. De esta forma se obtendrá un dataframe que permitirá determinar los CVE que afectan a cada CPE.
 
 ## 3. Procesamiento de los datos
 
@@ -53,23 +61,50 @@ Las distintas fuentes en que se han encontrado los datos son las siguientes:
 
 Partiendo de la lista de productos, en nuestro caso sistemas operativos se construye un dataframe dónde se tiene el listado de todas las vulnerabilidades (CVE) por cada producto. Junto con esta información se añade el valor correspondiente de CPE para nuestro producto ( sistemas operativos), el score de la vulnerabilidad y el año de la publicación.
 
-```{r,echo=FALSE}
-suppressWarnings(library(vgjsmParser))
-
-
-doc <- vgjsmParser::readXMLFile(file = "../inst/extdata/nvdcve-2.0-2016.xml")
-
-#head(dff,n=5)
+```{r mostrando datos elegantes,echo=FALSE, cache=TRUE}
+library(vgjsmParser)
+df <- vgjsmParser::vgjsmParser()
+#to generate a formated table of the first 5 items of our df final
+library(knitr)
+df_2 <- head(df, 5)
+kable(df_2,col.names = c("CVE","CPE","SCORE","AÑO","SO"),caption="CVE parseado por codigos CPE según SO")
 ```
 
-```{r cargando, cache=TRUE}
-df <- vgjsmParser::crear_dataframe(doc)
+### 3.2 Análisis de exploración de datos
+
+Con los datos obtenidos de la búsqueda del listado de sistemas operativos que teníamos como datos de entrada hemos realizado una exploración entre las diferentes variables que teniamos en juego: los diferentes vulnerabilidades (CVE) por tipos de sistemas operativos, las vulnerabilidades por año.
+
+```{r grafica barras año versus so, echo=FALSE}
+suppressWarnings(library(ggplot2))
+colnames(df) <- c("CVE","CPE","SCORE","YEAR","SO")
+ggplot(data=df,aes(YEAR, fill=SO)) + geom_bar(stat="count", width=0.5) + ggtitle("Número de vulnerabilidades de SO al año")
+
 ```
 
-You can also embed `r df[1,1]` plots, for example:
-
-```{r, echo=FALSE}
-head(df, 5)
+```{r grafica puntos año versus cve, echo=FALSE}
+ggplot(data=df,aes(YEAR,fill=CVE)) + geom_point(stat="count") + ggtitle("Número de vulnerabilidades por año") + labs(x="YEAR",y="NUM CVE") + theme(legend.position="none")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r grafica puntos riesgo por año, echo=FALSE}
+#para que no salga ningun warning en toda la ejecucion
+options(warn=-1)
+ggplot(data=df,aes(YEAR,SCORE)) + geom_point() + stat_smooth() + ggtitle("Riesgo medio por año") + labs(x="YEAR",y="SCORE") + theme(legend.position="none")
+
+```
+
+```{r grafica num vulnerabilidades por año, echo=FALSE}
+ggplot(data=df,aes(SO, fill=CVE)) + geom_bar(stat="count",width=0.5) + theme(legend.position="none") + labs(x="SO",y="NUM CVE") + ggtitle("Número de vulnerabilidades en total en todos los años del estudio y por SO") 
+```
+
+## 4. Respuesta a la pregunta
+
+
+## 5. Código
+
+EL código está asociado al repositorio de Github 
+
+[https://github.com/Shotouke/vgjsmParser ]https://github.com/Shotouke/vgjsmParser 
+
+### 5.1 Package
+
+### 5.2 Test funcional

@@ -13,11 +13,12 @@ initialize_dataframe <- function(...) {
     max <- max + length(obtainAllCPEs(doc = x))
   }
 
-  df<-data.frame(cve = character(max), cpe = character(max), cvss = numeric(max), year = character(max))
+  df<-data.frame(cve = character(max), cpe = character(max), cvss = numeric(max), year = character(max), so = character(max))
 
   df$cve <- as.character(df$cve)
   df$cpe <- as.character(df$cpe)
   df$year <- as.character(df$year)
+  df$so <- as.character(df$so)
 
   return(df)
 }
@@ -53,6 +54,7 @@ save_content <- function(xmlFile, nodesList, df, cpe) {
         df[dfCounter,2] <- c[[j]]
         df[dfCounter,3] <- cvss[[1]]
         df[dfCounter,4] <- substr(cves[[1]], 5, 8)
+        df[dfCouner, 5] <- cpe
         dfCounter <- dfCounter + 1
       }
     }
