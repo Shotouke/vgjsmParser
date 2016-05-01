@@ -98,13 +98,10 @@ ggplot(data=df,aes(SO, fill=CVE)) + geom_bar(stat="count",width=0.5) + theme(leg
 
 ## 4. Respuesta a la pregunta
 
+Se puede observar en los gráficos que el sistema operativo (SO) con mayor número de vulnerablidades es Windows y, por lo tanto, en relación con el tema de la seguridad informática dentro de una organización es el menos recomendable de utilizar. Si aún conociendo estos resultados se decidiese hacer uso de este software se deben tomar medidas para disminuir el riesgo que esto colleva.
 
 ## 5. Código
 
 EL código está asociado al repositorio de Github 
 
-[https://github.com/Shotouke/vgjsmParser ]https://github.com/Shotouke/vgjsmParser 
-
-### 5.1 Package
-
-### 5.2 Test funcional
+[Repositorio de GitHub](https://github.com/Shotouke/vgjsmParser)
